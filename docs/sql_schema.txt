@@ -1,0 +1,71 @@
+CREATE DATABASE resturants_guide;
+USE resturants_guide;
+
+CREATE TABLE app_user(
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
+  email    VARCHAR(255) NOT NULL UNIQUE,
+  user_password VARCHAR(255) NOT NULL,
+  role     ENUM('user', 'owner', 'admin') NOT NULL DEFAULT 'user'
+);
+
+CREATE TABLE place (
+  place_id    INT AUTO_INCREMENT PRIMARY KEY,
+  place_name  VARCHAR(255) NOT NULL,
+  phone_number VARCHAR(255),
+  latitude    DECIMAL(9,6) NOT NULL,
+  longitude   DECIMAL(9,6) NOT NULL,
+  rating      DECIMAL(2,1),
+  price_range VARCHAR(255)
+);
+
+CREATE TABLE category(
+  category_id INT AUTO_INCREMENT PRIMARY KEY,
+  category_name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE place_category (
+  place_id    INT NOT NULL,
+  category_id INT NOT NULL,
+  PRIMARY KEY (place_id, category_id),
+  FOREIGN KEY (place_id) REFERENCES place(place_id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE
+);
+
+CREATE TABLE place_hours (
+  PRIMARY KEY (place_id, day_of_week),
+  place_id    INT NOT NULL,
+  day_of_week TINYINT,      -- 0 = Sunday  6 = Saturday
+  open_time   TIME,
+  close_time  TIME,
+  FOREIGN KEY (place_id) REFERENCES place(place_id) ON DELETE CASCADE
+);
+
+CREATE TABLE meal(
+  meal_id INT AUTO_INCREMENT PRIMARY KEY,
+  meal_name VARCHAR(255),
+  place_id INT,
+  price DECIMAL(5,2),
+  FOREIGN KEY (place_id) REFERENCES place(place_id) ON DELETE CASCADE
+);
+
+CREATE TABLE meal_category(
+  meal_id     INT NOT NULL,
+  category_id INT NOT NULL,
+  PRIMARY KEY (meal_id, category_id),
+  FOREIGN KEY (meal_id) REFERENCES meal(meal_id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE
+);
+
+CREATE TABLE attribute(
+  attribute_id   INT AUTO_INCREMENT PRIMARY KEY,
+  attribute_name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE place_attribute(
+  PRIMARY KEY (place_id, attribute_id),
+  place_id     INT NOT NULL,
+  attribute_id INT NOT NULL,
+  FOREIGN KEY (place_id) REFERENCES place(place_id) ON DELETE CASCADE,
+  FOREIGN KEY (attribute_id) REFERENCES attribute(attribute_id) ON DELETE CASCADE
+);
