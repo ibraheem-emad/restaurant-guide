@@ -1,4 +1,4 @@
-USE NearWise;
+USE resturants_guide;
 
 INSERT INTO category (category_name) VALUES
 ('مشاوي'),
