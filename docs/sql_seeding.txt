@@ -1,4 +1,4 @@
-USE resturants_guide;
+USE restaurant_guide;
 
 INSERT INTO category (category_name) VALUES
 ('مشاوي'),

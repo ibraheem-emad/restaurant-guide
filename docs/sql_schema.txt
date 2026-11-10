@@ -1,5 +1,5 @@
-CREATE DATABASE resturants_guide;
-USE resturants_guide;
+CREATE DATABASE restaurant_guide;
+USE restaurant_guide;
 
 CREATE TABLE app_user(
   user_id INT AUTO_INCREMENT PRIMARY KEY,
