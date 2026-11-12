@@ -18,6 +18,12 @@ function view($name, $data = [])
     require __DIR__ . '/views/footer.php';
 }
 
+function redirect($path)
+{
+    header('Location: ' . url($path));
+    exit;
+}
+
 function not_found()
 {
     http_response_code(404);

@@ -15,7 +15,7 @@ function is_open_now($hours, $today, $time)
                 return true;
             }
         } else {
-            // closes after midnight, for example 18:00 to 01:00
+
             if ($day == $today && $time >= $open) {
                 return true;
             }
