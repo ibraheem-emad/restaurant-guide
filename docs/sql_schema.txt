@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS restaurant_guide;
 CREATE DATABASE restaurant_guide;
 USE restaurant_guide;
 
@@ -16,7 +17,8 @@ CREATE TABLE place (
   latitude    DECIMAL(9,6) NOT NULL,
   longitude   DECIMAL(9,6) NOT NULL,
   rating      DECIMAL(2,1),
-  price_range VARCHAR(255)
+  price_range VARCHAR(255),
+  status      ENUM('draft', 'published', 'hidden') NOT NULL DEFAULT 'draft'
 );
 
 CREATE TABLE category(

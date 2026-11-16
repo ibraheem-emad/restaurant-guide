@@ -13,10 +13,10 @@ INSERT INTO attribute (attribute_name) VALUES
 ('مواقف سيارات'),
 ('مدخل لكراسي متحركة');
 
-INSERT INTO place (place_name, phone_number, latitude, longitude, rating, price_range) VALUES
-('مشاوي الريف', '0590000001', 31.903800, 35.203400, 4.5, 'medium'),
-('بيتزا البلد', '0590000002', 31.532600, 35.099800, 4.2, 'low'),
-('حلويات الشرق', '0590000003', 32.221100, 35.254400, 4.8, 'low');
+INSERT INTO place (place_name, phone_number, latitude, longitude, rating, price_range, status) VALUES
+('مشاوي الريف', '0590000001', 31.903800, 35.203400, 4.5, 'medium', 'published'),
+('بيتزا البلد', '0590000002', 31.532600, 35.099800, 4.2, 'low', 'published'),
+('حلويات الشرق', '0590000003', 32.221100, 35.254400, 4.8, 'low', 'published');
 
 INSERT INTO place_category (place_id, category_id) VALUES
 (1, 1),
@@ -75,3 +75,6 @@ INSERT INTO meal_category (meal_id, category_id) VALUES
 (8, 3),
 (9, 3),
 (10, 5);
+
+INSERT INTO app_user (username, email, user_password, role) VALUES
+('admin', 'admin@guide.test', '$2y$10$mFdso0RAbYFlaggKI8Fd9OTi55LLTtOGx/iuOH2wlwZRNh6oENEbu', 'admin');
