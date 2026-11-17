@@ -9,6 +9,7 @@ require __DIR__ . '/../app/controllers/restaurant_controller.php';
 require __DIR__ . '/../app/models/user_model.php';
 require __DIR__ . '/../app/controllers/auth_controller.php';
 require __DIR__ . '/../app/controllers/admin_controller.php';
+require __DIR__ . '/../app/models/admin_model.php';
 
 session_start();
 date_default_timezone_set('Asia/Hebron');
@@ -36,6 +37,10 @@ if ($path == '' || $path == '/restaurants') {
     logout();
 } elseif ($path == '/admin') {
     admin_page();
+} elseif ($path == '/admin/add-restaurant' && $method == 'GET') {
+    add_restaurant_page($pdo);
+} elseif ($path == '/admin/add-restaurant' && $method == 'POST') {
+    add_restaurant_submit($pdo);
 } else {
     not_found();
 }

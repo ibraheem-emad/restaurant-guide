@@ -2,6 +2,11 @@
 
 <p>أهلاً <?= e($_SESSION['username']) ?>، هذه الصفحة للadmin فقط.</p>
 
+<?php if (isset($_GET['saved'])): ?>
+    <div class="alert alert-success">تم حفظ المطعم.</div>
+<?php endif; ?>
+
 <div class="list-group">
+    <a class="list-group-item list-group-item-action" href="<?= url('/admin/add-restaurant') ?>">إضافة مطعم</a>
     <a class="list-group-item list-group-item-action" href="<?= url('/restaurants') ?>">عرض المطاعم</a>
 </div>
