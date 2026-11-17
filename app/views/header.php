@@ -14,6 +14,9 @@
         <div>
             <?php if (isset($_SESSION['user_id'])): ?>
                 أهلاً <?= e($_SESSION['username']) ?>
+                <?php if ($_SESSION['role'] == 'admin'): ?>
+                    <a class="btn btn-sm btn-outline-primary ms-2" href="<?= url('/admin') ?>">لوحة التحكم</a>
+                <?php endif; ?>
                 <a class="btn btn-sm btn-outline-secondary ms-2" href="<?= url('/logout') ?>">خروج</a>
             <?php else: ?>
                 <a class="btn btn-sm btn-outline-primary" href="<?= url('/login') ?>">دخول</a>

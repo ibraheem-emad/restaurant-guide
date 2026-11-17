@@ -1,4 +1,4 @@
-<h1 class="h4 mb-3"><?= count($restaurants) ?> مطعم</h1>
+<h1 class="h4 mb-3"><?= count($restaurants) ?> مطاعم</h1>
 
 <div class="row g-3">
     <?php foreach ($restaurants as $r): ?>

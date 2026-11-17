@@ -54,7 +54,11 @@ function login_submit($pdo)
     $_SESSION['username'] = $user['username'];
     $_SESSION['role'] = $user['role'];
 
-    redirect('/');
+    if ($user['role'] == 'admin') {
+        redirect('/admin');
+    } else {
+        redirect('/');
+    }
 }
 
 function logout()

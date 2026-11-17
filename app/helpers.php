@@ -24,6 +24,17 @@ function redirect($path)
     exit;
 }
 
+function require_role($role)
+{
+    if (!isset($_SESSION['user_id'])) {
+        redirect('/login');
+    }
+
+    if ($_SESSION['role'] != $role) {
+        redirect('/');
+    }
+}
+
 function not_found()
 {
     http_response_code(404);

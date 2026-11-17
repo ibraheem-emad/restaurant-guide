@@ -8,6 +8,7 @@ require __DIR__ . '/../app/models/restaurant_model.php';
 require __DIR__ . '/../app/controllers/restaurant_controller.php';
 require __DIR__ . '/../app/models/user_model.php';
 require __DIR__ . '/../app/controllers/auth_controller.php';
+require __DIR__ . '/../app/controllers/admin_controller.php';
 
 session_start();
 date_default_timezone_set('Asia/Hebron');
@@ -33,6 +34,8 @@ if ($path == '' || $path == '/restaurants') {
     login_submit($pdo);
 } elseif ($path == '/logout') {
     logout();
+} elseif ($path == '/admin') {
+    admin_page();
 } else {
     not_found();
 }
