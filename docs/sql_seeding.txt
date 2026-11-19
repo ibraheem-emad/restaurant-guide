@@ -78,3 +78,19 @@ INSERT INTO meal_category (meal_id, category_id) VALUES
 
 INSERT INTO app_user (username, email, user_password, role) VALUES
 ('admin', 'admin@guide.test', '$2y$10$mFdso0RAbYFlaggKI8Fd9OTi55LLTtOGx/iuOH2wlwZRNh6oENEbu', 'admin');
+
+
+INSERT INTO app_user (username, email, user_password) VALUES
+('سارة', 'sara@guide.test', '$2y$10$S0LIDhdkJ.OQFokU07CsAuNyO/e4vJDzZLICJeQ5l3d0E.lsTdPCG'),
+('أحمد', 'ahmad@guide.test', '$2y$10$S0LIDhdkJ.OQFokU07CsAuNyO/e4vJDzZLICJeQ5l3d0E.lsTdPCG');
+
+INSERT INTO review (user_id, place_id, rating, comment) VALUES
+(2, 1, 5, 'مشاوي طازجة وخدمة سريعة'),
+(2, 3, 4, 'الكنافة ممتازة لكن المكان مزدحم'),
+(3, 1, 4, 'الأسعار مناسبة'),
+(3, 2, 3, 'البيتزا جيدة');
+
+INSERT INTO favorite (user_id, place_id) VALUES
+(2, 1),
+(2, 3),
+(3, 2);
