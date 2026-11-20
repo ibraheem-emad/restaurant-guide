@@ -56,6 +56,12 @@ function day_name($day)
 
 function price_label($price_range)
 {
-    $labels = ['low' => '₪', 'medium' => '₪₪', 'high' => '₪₪₪'];
+    $labels = ['low' => 'اقتصادي', 'medium' => 'متوسط', 'high' => 'مرتفع'];
     return $labels[$price_range] ?? '';
+}
+
+function status_label($status)
+{
+    $labels = ['draft' => 'مسودة', 'published' => 'منشور', 'hidden' => 'مخفي'];
+    return $labels[$status] ?? '';
 }

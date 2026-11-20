@@ -64,3 +64,19 @@ function add_restaurant_submit($pdo)
 
     redirect('/admin?saved=1');
 }
+
+function admin_restaurants_page($pdo)
+{
+    require_role('admin');
+
+    $status = '';
+    if (isset($_GET['status'])) {
+        $status = $_GET['status'];
+    }
+
+    view('admin_restaurants', [
+        'title' => 'إدارة المطاعم',
+        'status' => $status,
+        'restaurants' => get_admin_restaurants($pdo, $status),
+    ]);
+}

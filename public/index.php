@@ -37,6 +37,8 @@ if ($path == '' || $path == '/restaurants') {
     logout();
 } elseif ($path == '/admin') {
     admin_page();
+} elseif ($path == '/admin/restaurants') {
+    admin_restaurants_page($pdo);
 } elseif ($path == '/admin/add-restaurant' && $method == 'GET') {
     add_restaurant_page($pdo);
 } elseif ($path == '/admin/add-restaurant' && $method == 'POST') {

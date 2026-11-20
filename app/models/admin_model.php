@@ -29,3 +29,14 @@ function add_restaurant_attribute($pdo, $place_id, $attribute_id)
     $stmt = $pdo->prepare("INSERT INTO place_attribute (place_id, attribute_id) VALUES (?, ?)");
     $stmt->execute([$place_id, $attribute_id]);
 }
+
+function get_admin_restaurants($pdo, $status)
+{
+    if ($status == '') {
+        return $pdo->query("SELECT place_id, place_name, price_range, status FROM place ORDER BY place_name")->fetchAll();
+    }
+
+    $stmt = $pdo->prepare("SELECT place_id, place_name, price_range, status FROM place WHERE status = ? ORDER BY place_name");
+    $stmt->execute([$status]);
+    return $stmt->fetchAll();
+}
