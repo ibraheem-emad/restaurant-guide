@@ -40,3 +40,42 @@ function get_admin_restaurants($pdo, $status)
     $stmt->execute([$status]);
     return $stmt->fetchAll();
 }
+
+function get_restaurant_for_edit($pdo, $id)
+{
+    $stmt = $pdo->prepare("SELECT * FROM place WHERE place_id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch();
+}
+
+function get_restaurant_category_ids($pdo, $id)
+{
+    $stmt = $pdo->prepare("SELECT category_id FROM place_category WHERE place_id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
+function get_restaurant_attribute_ids($pdo, $id)
+{
+    $stmt = $pdo->prepare("SELECT attribute_id FROM place_attribute WHERE place_id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
+function update_restaurant($pdo, $id, $name, $phone, $latitude, $longitude, $price_range, $status)
+{
+    $stmt = $pdo->prepare("UPDATE place SET place_name = ?, phone_number = ?, latitude = ?, longitude = ?, price_range = ?, status = ? WHERE place_id = ?");
+    $stmt->execute([$name, $phone, $latitude, $longitude, $price_range, $status, $id]);
+}
+
+function clear_restaurant_categories($pdo, $id)
+{
+    $stmt = $pdo->prepare("DELETE FROM place_category WHERE place_id = ?");
+    $stmt->execute([$id]);
+}
+
+function clear_restaurant_attributes($pdo, $id)
+{
+    $stmt = $pdo->prepare("DELETE FROM place_attribute WHERE place_id = ?");
+    $stmt->execute([$id]);
+}

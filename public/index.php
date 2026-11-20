@@ -43,6 +43,10 @@ if ($path == '' || $path == '/restaurants') {
     add_restaurant_page($pdo);
 } elseif ($path == '/admin/add-restaurant' && $method == 'POST') {
     add_restaurant_submit($pdo);
+} elseif (preg_match('#^/admin/edit-restaurant/(\d+)$#', $path, $match) && $method == 'GET') {
+    edit_restaurant_page($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/edit-restaurant/(\d+)$#', $path, $match) && $method == 'POST') {
+    edit_restaurant_submit($pdo, (int) $match[1]);
 } else {
     not_found();
 }
