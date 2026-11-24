@@ -93,6 +93,7 @@ function show_edit_form($pdo, $restaurant, $error)
         'attributes' => get_attributes($pdo),
         'checked_categories' => get_restaurant_category_ids($pdo, $id),
         'checked_attributes' => get_restaurant_attribute_ids($pdo, $id),
+        'hours' => get_hours($pdo, $id),
     ]);
 }
 
@@ -152,6 +153,16 @@ function edit_restaurant_submit($pdo, $id)
     if (isset($_POST['attributes'])) {
         foreach ($_POST['attributes'] as $attribute_id) {
             add_restaurant_attribute($pdo, $id, $attribute_id);
+        }
+    }
+
+    clear_restaurant_hours($pdo, $id);
+    for ($day = 0; $day <= 6; $day++) {
+        $open_time = $_POST['open_time'][$day];
+        $close_time = $_POST['close_time'][$day];
+
+        if ($open_time != '' && $close_time != '') {
+            add_restaurant_hours($pdo, $id, $day, $open_time, $close_time);
         }
     }
 

@@ -79,3 +79,15 @@ function clear_restaurant_attributes($pdo, $id)
     $stmt = $pdo->prepare("DELETE FROM place_attribute WHERE place_id = ?");
     $stmt->execute([$id]);
 }
+
+function clear_restaurant_hours($pdo, $id)
+{
+    $stmt = $pdo->prepare("DELETE FROM place_hours WHERE place_id = ?");
+    $stmt->execute([$id]);
+}
+
+function add_restaurant_hours($pdo, $id, $day, $open_time, $close_time)
+{
+    $stmt = $pdo->prepare("INSERT INTO place_hours (place_id, day_of_week, open_time, close_time) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$id, $day, $open_time, $close_time]);
+}

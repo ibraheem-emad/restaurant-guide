@@ -56,6 +56,24 @@
     </div>
 
     <div class="mb-3">
+        <div class="form-label">ساعات العمل (اترك اليوم فارغاً إذا كان المطعم مغلقاً فيه)</div>
+        <table class="table table-sm w-auto">
+            <?php for ($day = 0; $day <= 6; $day++): ?>
+                <tr>
+                    <th><?= day_name($day) ?></th>
+                    <td>
+                        <input class="form-control form-control-sm" type="time" name="open_time[<?= $day ?>]" value="<?= isset($hours[$day]) ? substr($hours[$day]['open_time'], 0, 5) : '' ?>">
+                    </td>
+                    <td>إلى</td>
+                    <td>
+                        <input class="form-control form-control-sm" type="time" name="close_time[<?= $day ?>]" value="<?= isset($hours[$day]) ? substr($hours[$day]['close_time'], 0, 5) : '' ?>">
+                    </td>
+                </tr>
+            <?php endfor; ?>
+        </table>
+    </div>
+    
+    <div class="mb-3">
         <label class="form-label" for="status">الحالة</label>
         <select class="form-select" id="status" name="status">
             <option value="draft" <?= $restaurant['status'] == 'draft' ? 'selected' : '' ?>>مسودة (مخفي عن الزوار)</option>
