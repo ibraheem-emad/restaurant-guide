@@ -9,5 +9,7 @@
 <div class="list-group">
     <a class="list-group-item list-group-item-action" href="<?= url('/admin/restaurants') ?>">إدارة المطاعم</a>
     <a class="list-group-item list-group-item-action" href="<?= url('/admin/add-restaurant') ?>">إضافة مطعم</a>
+    <a class="list-group-item list-group-item-action" href="<?= url('/admin/categories') ?>">التصنيفات</a>
+    <a class="list-group-item list-group-item-action" href="<?= url('/admin/attributes') ?>">المميزات</a>
     <a class="list-group-item list-group-item-action" href="<?= url('/restaurants') ?>">عرض المطاعم</a>
 </div>

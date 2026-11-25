@@ -57,6 +57,22 @@ if ($path == '' || $path == '/restaurants') {
     edit_meal_page($pdo, (int) $match[1]);
 } elseif (preg_match('#^/admin/edit-meal/(\d+)$#', $path, $match) && $method == 'POST') {
     edit_meal_submit($pdo, (int) $match[1]);
+} elseif ($path == '/admin/categories' && $method == 'GET') {
+    categories_page($pdo);
+} elseif ($path == '/admin/categories' && $method == 'POST') {
+    add_category_submit($pdo);
+} elseif (preg_match('#^/admin/edit-category/(\d+)$#', $path, $match) && $method == 'POST') {
+    edit_category_submit($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/delete-category/(\d+)$#', $path, $match) && $method == 'POST') {
+    delete_category_submit($pdo, (int) $match[1]);
+} elseif ($path == '/admin/attributes' && $method == 'GET') {
+    attributes_page($pdo);
+} elseif ($path == '/admin/attributes' && $method == 'POST') {
+    add_attribute_submit($pdo);
+} elseif (preg_match('#^/admin/edit-attribute/(\d+)$#', $path, $match) && $method == 'POST') {
+    edit_attribute_submit($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/delete-attribute/(\d+)$#', $path, $match) && $method == 'POST') {
+    delete_attribute_submit($pdo, (int) $match[1]);
 } else {
     not_found();
 }

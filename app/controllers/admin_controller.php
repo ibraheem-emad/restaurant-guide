@@ -303,3 +303,149 @@ function edit_meal_submit($pdo, $meal_id)
 
     redirect('/admin/menu/' . $meal['place_id'] . '?saved=1');
 }
+
+function show_categories_page($pdo, $error)
+{
+    view('admin_categories', [
+        'title' => 'التصنيفات',
+        'error' => $error,
+        'categories' => get_categories($pdo),
+    ]);
+}
+
+function categories_page($pdo)
+{
+    require_role('admin');
+
+    show_categories_page($pdo, '');
+}
+
+function add_category_submit($pdo)
+{
+    require_role('admin');
+
+    $name = trim($_POST['category_name']);
+
+    $error = '';
+
+    if ($name == '') {
+        $error = 'الاسم مطلوب.';
+    } elseif (category_name_taken($pdo, $name, 0)) {
+        $error = 'هذا التصنيف موجود من قبل.';
+    }
+
+    if ($error != '') {
+        show_categories_page($pdo, $error);
+        return;
+    }
+
+    add_category($pdo, $name);
+
+    redirect('/admin/categories?saved=1');
+}
+
+function edit_category_submit($pdo, $id)
+{
+    require_role('admin');
+
+    $name = trim($_POST['category_name']);
+
+    $error = '';
+
+    if ($name == '') {
+        $error = 'الاسم مطلوب.';
+    } elseif (category_name_taken($pdo, $name, $id)) {
+        $error = 'هذا التصنيف موجود من قبل.';
+    }
+
+    if ($error != '') {
+        show_categories_page($pdo, $error);
+        return;
+    }
+
+    update_category($pdo, $id, $name);
+
+    redirect('/admin/categories?saved=1');
+}
+
+function delete_category_submit($pdo, $id)
+{
+    require_role('admin');
+
+    delete_category($pdo, $id);
+
+    redirect('/admin/categories?deleted=1');
+}
+
+function show_attributes_page($pdo, $error)
+{
+    view('admin_attributes', [
+        'title' => 'المميزات',
+        'error' => $error,
+        'attributes' => get_attributes($pdo),
+    ]);
+}
+
+function attributes_page($pdo)
+{
+    require_role('admin');
+
+    show_attributes_page($pdo, '');
+}
+
+function add_attribute_submit($pdo)
+{
+    require_role('admin');
+
+    $name = trim($_POST['attribute_name']);
+
+    $error = '';
+
+    if ($name == '') {
+        $error = 'الاسم مطلوب.';
+    } elseif (attribute_name_taken($pdo, $name, 0)) {
+        $error = 'هذه الميزة موجودة من قبل.';
+    }
+
+    if ($error != '') {
+        show_attributes_page($pdo, $error);
+        return;
+    }
+
+    add_attribute($pdo, $name);
+
+    redirect('/admin/attributes?saved=1');
+}
+
+function edit_attribute_submit($pdo, $id)
+{
+    require_role('admin');
+
+    $name = trim($_POST['attribute_name']);
+
+    $error = '';
+
+    if ($name == '') {
+        $error = 'الاسم مطلوب.';
+    } elseif (attribute_name_taken($pdo, $name, $id)) {
+        $error = 'هذه الميزة موجودة من قبل.';
+    }
+
+    if ($error != '') {
+        show_attributes_page($pdo, $error);
+        return;
+    }
+
+    update_attribute($pdo, $id, $name);
+
+    redirect('/admin/attributes?saved=1');
+}
+
+function delete_attribute_submit($pdo, $id)
+{
+    require_role('admin');
+
+    delete_attribute($pdo, $id);
+
+    redirect('/admin/attributes?deleted=1');
+}

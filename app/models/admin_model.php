@@ -145,3 +145,53 @@ function clear_meal_category($pdo, $meal_id)
     $stmt = $pdo->prepare("DELETE FROM meal_category WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
 }
+
+function add_category($pdo, $name)
+{
+    $stmt = $pdo->prepare("INSERT INTO category (category_name) VALUES (?)");
+    $stmt->execute([$name]);
+}
+
+function update_category($pdo, $id, $name)
+{
+    $stmt = $pdo->prepare("UPDATE category SET category_name = ? WHERE category_id = ?");
+    $stmt->execute([$name, $id]);
+}
+
+function delete_category($pdo, $id)
+{
+    $stmt = $pdo->prepare("DELETE FROM category WHERE category_id = ?");
+    $stmt->execute([$id]);
+}
+
+function category_name_taken($pdo, $name, $id)
+{
+    $stmt = $pdo->prepare("SELECT category_id FROM category WHERE category_name = ? AND category_id != ?");
+    $stmt->execute([$name, $id]);
+    return $stmt->fetch();
+}
+
+function add_attribute($pdo, $name)
+{
+    $stmt = $pdo->prepare("INSERT INTO attribute (attribute_name) VALUES (?)");
+    $stmt->execute([$name]);
+}
+
+function update_attribute($pdo, $id, $name)
+{
+    $stmt = $pdo->prepare("UPDATE attribute SET attribute_name = ? WHERE attribute_id = ?");
+    $stmt->execute([$name, $id]);
+}
+
+function delete_attribute($pdo, $id)
+{
+    $stmt = $pdo->prepare("DELETE FROM attribute WHERE attribute_id = ?");
+    $stmt->execute([$id]);
+}
+
+function attribute_name_taken($pdo, $name, $id)
+{
+    $stmt = $pdo->prepare("SELECT attribute_id FROM attribute WHERE attribute_name = ? AND attribute_id != ?");
+    $stmt->execute([$name, $id]);
+    return $stmt->fetch();
+}
