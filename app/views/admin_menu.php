@@ -1,7 +1,7 @@
 <h1 class="h4 mb-3">منيو <?= e($restaurant['place_name']) ?></h1>
 
 <?php if (isset($_GET['saved'])): ?>
-    <div class="alert alert-success">تمت إضافة الوجبة.</div>
+    <div class="alert alert-success">تمت حفظ الوجبة.</div>
 <?php endif; ?>
 
 <?php if (isset($_GET['deleted'])): ?>
@@ -28,7 +28,8 @@
                 <td><?= e($meal['category_name']) ?></td>
                 <td><?= e($meal['price']) ?> ₪</td>
                 <td>
-                    <form method="post" action="<?= url('/admin/delete-meal/' . $meal['meal_id']) ?>" onsubmit="return confirm('هل تريد حذف هذه الوجبة؟')">
+                    <a class="btn btn-sm btn-outline-primary" href="<?= url('/admin/edit-meal/' . $meal['meal_id']) ?>">تعديل</a>
+                    <form class="d-inline" method="post" action="<?= url('/admin/delete-meal/' . $meal['meal_id']) ?>" onsubmit="return confirm('هل تريد حذف هذه الوجبة؟')">
                         <button class="btn btn-sm btn-outline-danger" type="submit">حذف</button>
                     </form>
                 </td>

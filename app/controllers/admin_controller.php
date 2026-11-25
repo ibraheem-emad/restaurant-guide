@@ -243,3 +243,63 @@ function delete_meal_submit($pdo, $meal_id)
 
     redirect('/admin/menu/' . $meal['place_id'] . '?deleted=1');
 }
+
+function show_edit_meal_form($pdo, $meal, $error)
+{
+    view('admin_edit_meal', [
+        'title' => 'تعديل وجبة',
+        'error' => $error,
+        'meal' => $meal,
+        'categories' => get_categories($pdo),
+    ]);
+}
+
+function edit_meal_page($pdo, $meal_id)
+{
+    require_role('admin');
+
+    $meal = get_meal($pdo, $meal_id);
+    if (!$meal) {
+        not_found();
+        return;
+    }
+
+    show_edit_meal_form($pdo, $meal, '');
+}
+
+function edit_meal_submit($pdo, $meal_id)
+{
+    require_role('admin');
+
+    $meal = get_meal($pdo, $meal_id);
+    if (!$meal) {
+        not_found();
+        return;
+    }
+
+    $name = trim($_POST['meal_name']);
+    $price = trim($_POST['price']);
+    $category_id = $_POST['category_id'];
+
+    $error = '';
+
+    if ($name == '') {
+        $error = 'اسم الوجبة مطلوب.';
+    } elseif (!is_numeric($price) || $price < 0 || $price > 999) {
+        $error = 'السعر يجب أن يكون رقماً بين 0 و 999.';
+    }
+
+    if ($error != '') {
+        show_edit_meal_form($pdo, $meal, $error);
+        return;
+    }
+
+    update_meal($pdo, $meal_id, $name, $price);
+
+    clear_meal_category($pdo, $meal_id);
+    if ($category_id != '') {
+        add_meal_category($pdo, $meal_id, $category_id);
+    }
+
+    redirect('/admin/menu/' . $meal['place_id'] . '?saved=1');
+}

@@ -120,7 +120,10 @@ function add_meal_category($pdo, $meal_id, $category_id)
 
 function get_meal($pdo, $meal_id)
 {
-    $stmt = $pdo->prepare("SELECT * FROM meal WHERE meal_id = ?");
+    $stmt = $pdo->prepare("SELECT m.*, mc.category_id
+                           FROM meal m
+                           LEFT JOIN meal_category mc ON mc.meal_id = m.meal_id
+                           WHERE m.meal_id = ?");
     $stmt->execute([$meal_id]);
     return $stmt->fetch();
 }
@@ -128,5 +131,17 @@ function get_meal($pdo, $meal_id)
 function delete_meal($pdo, $meal_id)
 {
     $stmt = $pdo->prepare("DELETE FROM meal WHERE meal_id = ?");
+    $stmt->execute([$meal_id]);
+}
+
+function update_meal($pdo, $meal_id, $name, $price)
+{
+    $stmt = $pdo->prepare("UPDATE meal SET meal_name = ?, price = ? WHERE meal_id = ?");
+    $stmt->execute([$name, $price, $meal_id]);
+}
+
+function clear_meal_category($pdo, $meal_id)
+{
+    $stmt = $pdo->prepare("DELETE FROM meal_category WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
 }
