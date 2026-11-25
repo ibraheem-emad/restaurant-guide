@@ -47,6 +47,12 @@ if ($path == '' || $path == '/restaurants') {
     edit_restaurant_page($pdo, (int) $match[1]);
 } elseif (preg_match('#^/admin/edit-restaurant/(\d+)$#', $path, $match) && $method == 'POST') {
     edit_restaurant_submit($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/menu/(\d+)$#', $path, $match) && $method == 'GET') {
+    menu_page($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/menu/(\d+)$#', $path, $match) && $method == 'POST') {
+    add_meal_submit($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/delete-meal/(\d+)$#', $path, $match) && $method == 'POST') {
+    delete_meal_submit($pdo, (int) $match[1]);
 } else {
     not_found();
 }

@@ -91,3 +91,42 @@ function add_restaurant_hours($pdo, $id, $day, $open_time, $close_time)
     $stmt = $pdo->prepare("INSERT INTO place_hours (place_id, day_of_week, open_time, close_time) VALUES (?, ?, ?, ?)");
     $stmt->execute([$id, $day, $open_time, $close_time]);
 }
+
+function get_meals($pdo, $place_id)
+{
+    $stmt = $pdo->prepare("SELECT m.meal_id, m.meal_name, m.price, c.category_name
+                           FROM meal m
+                           LEFT JOIN meal_category mc ON mc.meal_id = m.meal_id
+                           LEFT JOIN category c ON c.category_id = mc.category_id
+                           WHERE m.place_id = ?
+                           ORDER BY m.meal_name");
+    $stmt->execute([$place_id]);
+    return $stmt->fetchAll();
+}
+
+function add_meal($pdo, $place_id, $name, $price)
+{
+    $stmt = $pdo->prepare("INSERT INTO meal (meal_name, place_id, price) VALUES (?, ?, ?)");
+    $stmt->execute([$name, $place_id, $price]);
+
+    return $pdo->lastInsertId();
+}
+
+function add_meal_category($pdo, $meal_id, $category_id)
+{
+    $stmt = $pdo->prepare("INSERT INTO meal_category (meal_id, category_id) VALUES (?, ?)");
+    $stmt->execute([$meal_id, $category_id]);
+}
+
+function get_meal($pdo, $meal_id)
+{
+    $stmt = $pdo->prepare("SELECT * FROM meal WHERE meal_id = ?");
+    $stmt->execute([$meal_id]);
+    return $stmt->fetch();
+}
+
+function delete_meal($pdo, $meal_id)
+{
+    $stmt = $pdo->prepare("DELETE FROM meal WHERE meal_id = ?");
+    $stmt->execute([$meal_id]);
+}

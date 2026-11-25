@@ -29,6 +29,8 @@
                 <td>
                     <a href="<?= url('/admin/edit-restaurant/' . $r['place_id']) ?>">تعديل</a>
                     ·
+                    <a href="<?= url('/admin/menu/' . $r['place_id']) ?>">المنيو</a>
+                    ·
                     <a href="<?= url('/restaurant/' . $r['place_id']) ?>">عرض</a>
                 </td>
             </tr>
