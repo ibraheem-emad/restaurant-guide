@@ -32,6 +32,9 @@
                     <a href="<?= url('/admin/menu/' . $r['place_id']) ?>">المنيو</a>
                     ·
                     <a href="<?= url('/restaurant/' . $r['place_id']) ?>">عرض</a>
+                    ·
+                    <a href="<?= url('/admin/photos/' . $r['place_id']) ?>">الصور</a>
+                    ·
                 </td>
             </tr>
         <?php endforeach; ?>

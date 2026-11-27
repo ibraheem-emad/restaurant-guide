@@ -73,6 +73,18 @@ if ($path == '' || $path == '/restaurants') {
     edit_attribute_submit($pdo, (int) $match[1]);
 } elseif (preg_match('#^/admin/delete-attribute/(\d+)$#', $path, $match) && $method == 'POST') {
     delete_attribute_submit($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/photos/(\d+)$#', $path, $match) && $method == 'GET') {
+    photos_page($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/photos/(\d+)$#', $path, $match) && $method == 'POST') {
+    upload_photo_submit($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/photo-cover/(\d+)$#', $path, $match) && $method == 'POST') {
+    set_cover_submit($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/photo-up/(\d+)$#', $path, $match) && $method == 'POST') {
+    move_photo_submit($pdo, (int) $match[1], 'up');
+} elseif (preg_match('#^/admin/photo-down/(\d+)$#', $path, $match) && $method == 'POST') {
+    move_photo_submit($pdo, (int) $match[1], 'down');
+} elseif (preg_match('#^/admin/delete-photo/(\d+)$#', $path, $match) && $method == 'POST') {
+    delete_photo_submit($pdo, (int) $match[1]);
 } else {
     not_found();
 }

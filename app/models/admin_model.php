@@ -195,3 +195,44 @@ function attribute_name_taken($pdo, $name, $id)
     $stmt->execute([$name, $id]);
     return $stmt->fetch();
 }
+
+function get_photos($pdo, $place_id)
+{
+    $stmt = $pdo->prepare("SELECT * FROM photo WHERE place_id = ? ORDER BY sort_order");
+    $stmt->execute([$place_id]);
+    return $stmt->fetchAll();
+}
+
+function get_photo($pdo, $photo_id)
+{
+    $stmt = $pdo->prepare("SELECT * FROM photo WHERE photo_id = ?");
+    $stmt->execute([$photo_id]);
+    return $stmt->fetch();
+}
+
+function add_photo($pdo, $place_id, $file_name, $is_cover, $sort_order)
+{
+    $stmt = $pdo->prepare("INSERT INTO photo (place_id, file_name, is_cover, sort_order) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$place_id, $file_name, $is_cover, $sort_order]);
+}
+
+function set_cover($pdo, $place_id, $photo_id)
+{
+    $stmt = $pdo->prepare("UPDATE photo SET is_cover = 0 WHERE place_id = ?");
+    $stmt->execute([$place_id]);
+
+    $stmt = $pdo->prepare("UPDATE photo SET is_cover = 1 WHERE photo_id = ?");
+    $stmt->execute([$photo_id]);
+}
+
+function set_photo_order($pdo, $photo_id, $sort_order)
+{
+    $stmt = $pdo->prepare("UPDATE photo SET sort_order = ? WHERE photo_id = ?");
+    $stmt->execute([$sort_order, $photo_id]);
+}
+
+function delete_photo($pdo, $photo_id)
+{
+    $stmt = $pdo->prepare("DELETE FROM photo WHERE photo_id = ?");
+    $stmt->execute([$photo_id]);
+}

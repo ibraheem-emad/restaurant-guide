@@ -449,3 +449,155 @@ function delete_attribute_submit($pdo, $id)
 
     redirect('/admin/attributes?deleted=1');
 }
+
+function show_photos_page($pdo, $restaurant, $error)
+{
+    view('admin_photos', [
+        'title' => 'الصور',
+        'error' => $error,
+        'restaurant' => $restaurant,
+        'photos' => get_photos($pdo, $restaurant['place_id']),
+    ]);
+}
+
+function photos_page($pdo, $id)
+{
+    require_role('admin');
+
+    $restaurant = get_restaurant_for_edit($pdo, $id);
+    if (!$restaurant) {
+        not_found();
+        return;
+    }
+
+    show_photos_page($pdo, $restaurant, '');
+}
+
+function upload_photo_submit($pdo, $id)
+{
+    require_role('admin');
+
+    $restaurant = get_restaurant_for_edit($pdo, $id);
+    if (!$restaurant) {
+        not_found();
+        return;
+    }
+
+    $extensions = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+
+    $error = '';
+
+    if (!isset($_FILES['photo']) || $_FILES['photo']['error'] != UPLOAD_ERR_OK || $_FILES['photo']['size'] == 0) {
+        $error = 'اختر صورة أولاً (حتى 2 ميغابايت).';
+    } elseif ($_FILES['photo']['size'] > 2 * 1024 * 1024) {
+        $error = 'حجم الصورة يجب ألا يزيد عن 2 ميغابايت.';
+    } else {
+        $info = getimagesize($_FILES['photo']['tmp_name']);
+        if (!$info || !isset($extensions[$info['mime']])) {
+            $error = 'نوع الصورة يجب أن يكون JPG أو PNG أو WEBP.';
+        }
+    }
+
+    if ($error != '') {
+        show_photos_page($pdo, $restaurant, $error);
+        return;
+    }
+
+    $folder = __DIR__ . '/../../public/uploads/';
+    if (!is_dir($folder)) {
+        mkdir($folder);
+    }
+
+    $file_name = $id . '_' . uniqid() . '.' . $extensions[$info['mime']];
+    move_uploaded_file($_FILES['photo']['tmp_name'], $folder . $file_name);
+
+    $photos = get_photos($pdo, $id);
+
+    $is_cover = 0;
+    if (!$photos) {
+        $is_cover = 1;
+    }
+
+    $sort_order = 1;
+    foreach ($photos as $photo) {
+        $sort_order = $photo['sort_order'] + 1;
+    }
+
+    add_photo($pdo, $id, $file_name, $is_cover, $sort_order);
+
+    redirect('/admin/photos/' . $id . '?saved=1');
+}
+
+function set_cover_submit($pdo, $photo_id)
+{
+    require_role('admin');
+
+    $photo = get_photo($pdo, $photo_id);
+    if (!$photo) {
+        not_found();
+        return;
+    }
+
+    set_cover($pdo, $photo['place_id'], $photo_id);
+
+    redirect('/admin/photos/' . $photo['place_id']);
+}
+
+function move_photo_submit($pdo, $photo_id, $direction)
+{
+    require_role('admin');
+
+    $photo = get_photo($pdo, $photo_id);
+    if (!$photo) {
+        not_found();
+        return;
+    }
+
+    $photos = get_photos($pdo, $photo['place_id']);
+
+    for ($i = 0; $i < count($photos); $i++) {
+        if ($photos[$i]['photo_id'] == $photo_id) {
+            $position = $i;
+        }
+    }
+
+    if ($direction == 'up') {
+        $other = $position - 1;
+    } else {
+        $other = $position + 1;
+    }
+
+    if (isset($photos[$other])) {
+        set_photo_order($pdo, $photo_id, $photos[$other]['sort_order']);
+        set_photo_order($pdo, $photos[$other]['photo_id'], $photo['sort_order']);
+    }
+
+    redirect('/admin/photos/' . $photo['place_id']);
+}
+
+function delete_photo_submit($pdo, $photo_id)
+{
+    require_role('admin');
+
+    $photo = get_photo($pdo, $photo_id);
+    if (!$photo) {
+        not_found();
+        return;
+    }
+
+    delete_photo($pdo, $photo_id);
+
+    $file = __DIR__ . '/../../public/uploads/' . $photo['file_name'];
+    if (file_exists($file)) {
+        unlink($file);
+    }
+
+    if ($photo['is_cover']) {
+        $photos = get_photos($pdo, $photo['place_id']);
+        if ($photos) {
+            set_cover($pdo, $photo['place_id'], $photos[0]['photo_id']);
+        }
+    }
+
+    redirect('/admin/photos/' . $photo['place_id'] . '?deleted=1');
+}
