@@ -236,3 +236,48 @@ function delete_photo($pdo, $photo_id)
     $stmt = $pdo->prepare("DELETE FROM photo WHERE photo_id = ?");
     $stmt->execute([$photo_id]);
 }
+
+function get_users($pdo)
+{
+    return $pdo->query("SELECT u.user_id, u.username, u.email, u.role, u.is_blocked,
+                               GROUP_CONCAT(p.place_name SEPARATOR '، ') AS restaurants
+                        FROM app_user u
+                        LEFT JOIN place p ON p.owner_id = u.user_id
+                        GROUP BY u.user_id
+                        ORDER BY u.user_id")->fetchAll();
+}
+
+function get_user($pdo, $id)
+{
+    $stmt = $pdo->prepare("SELECT * FROM app_user WHERE user_id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch();
+}
+
+function set_user_role($pdo, $id, $role)
+{
+    $stmt = $pdo->prepare("UPDATE app_user SET role = ? WHERE user_id = ?");
+    $stmt->execute([$role, $id]);
+}
+
+function set_user_blocked($pdo, $id, $is_blocked)
+{
+    $stmt = $pdo->prepare("UPDATE app_user SET is_blocked = ? WHERE user_id = ?");
+    $stmt->execute([$is_blocked, $id]);
+}
+
+function create_owner($pdo, $username, $email, $password)
+{
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt = $pdo->prepare("INSERT INTO app_user (username, email, user_password, role) VALUES (?, ?, ?, 'owner')");
+    $stmt->execute([$username, $email, $hash]);
+
+    return $pdo->lastInsertId();
+}
+
+function set_restaurant_owner($pdo, $place_id, $user_id)
+{
+    $stmt = $pdo->prepare("UPDATE place SET owner_id = ? WHERE place_id = ?");
+    $stmt->execute([$user_id, $place_id]);
+}

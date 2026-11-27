@@ -85,6 +85,14 @@ if ($path == '' || $path == '/restaurants') {
     move_photo_submit($pdo, (int) $match[1], 'down');
 } elseif (preg_match('#^/admin/delete-photo/(\d+)$#', $path, $match) && $method == 'POST') {
     delete_photo_submit($pdo, (int) $match[1]);
+} elseif ($path == '/admin/users' && $method == 'GET') {
+    users_page($pdo);
+} elseif ($path == '/admin/users' && $method == 'POST') {
+    create_owner_submit($pdo);
+} elseif (preg_match('#^/admin/user-role/(\d+)$#', $path, $match) && $method == 'POST') {
+    change_role_submit($pdo, (int) $match[1]);
+} elseif (preg_match('#^/admin/block-user/(\d+)$#', $path, $match) && $method == 'POST') {
+    block_user_submit($pdo, (int) $match[1]);
 } else {
     not_found();
 }

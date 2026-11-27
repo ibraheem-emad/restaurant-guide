@@ -11,5 +11,6 @@
     <a class="list-group-item list-group-item-action" href="<?= url('/admin/add-restaurant') ?>">إضافة مطعم</a>
     <a class="list-group-item list-group-item-action" href="<?= url('/admin/categories') ?>">التصنيفات</a>
     <a class="list-group-item list-group-item-action" href="<?= url('/admin/attributes') ?>">المميزات</a>
+    <a class="list-group-item list-group-item-action" href="<?= url('/admin/users') ?>">المستخدمون</a>
     <a class="list-group-item list-group-item-action" href="<?= url('/restaurants') ?>">عرض المطاعم</a>
 </div>

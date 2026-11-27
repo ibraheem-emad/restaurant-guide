@@ -601,3 +601,102 @@ function delete_photo_submit($pdo, $photo_id)
 
     redirect('/admin/photos/' . $photo['place_id'] . '?deleted=1');
 }
+
+function show_users_page($pdo, $error)
+{
+    view('admin_users', [
+        'title' => 'المستخدمون',
+        'error' => $error,
+        'users' => get_users($pdo),
+        'restaurants' => get_admin_restaurants($pdo, ''),
+    ]);
+}
+
+function users_page($pdo)
+{
+    require_role('admin');
+
+    show_users_page($pdo, '');
+}
+
+function change_role_submit($pdo, $id)
+{
+    require_role('admin');
+
+    $role = $_POST['role'];
+
+    $error = '';
+
+    if ($id == $_SESSION['user_id']) {
+        $error = 'لا يمكنك تغيير دور حسابك.';
+    } elseif (!in_array($role, ['user', 'owner', 'admin'])) {
+        $error = 'الدور غير صحيح.';
+    }
+
+    if ($error != '') {
+        show_users_page($pdo, $error);
+        return;
+    }
+
+    set_user_role($pdo, $id, $role);
+
+    redirect('/admin/users?saved=1');
+}
+
+function block_user_submit($pdo, $id)
+{
+    require_role('admin');
+
+    $user = get_user($pdo, $id);
+    if (!$user) {
+        not_found();
+        return;
+    }
+
+    if ($id == $_SESSION['user_id']) {
+        show_users_page($pdo, 'لا يمكنك حظر حسابك.');
+        return;
+    }
+
+    if ($user['is_blocked']) {
+        set_user_blocked($pdo, $id, 0);
+    } else {
+        set_user_blocked($pdo, $id, 1);
+    }
+
+    redirect('/admin/users?saved=1');
+}
+
+function create_owner_submit($pdo)
+{
+    require_role('admin');
+
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $place_id = $_POST['place_id'];
+
+    $error = '';
+
+    if ($username == '') {
+        $error = 'الاسم مطلوب.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'البريد الإلكتروني غير صحيح.';
+    } elseif (strlen($password) < 8) {
+        $error = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل.';
+    } elseif (find_user_by_email($pdo, $email)) {
+        $error = 'هذا البريد مستخدم من قبل.';
+    } elseif ($place_id == '') {
+        $error = 'اختر المطعم.';
+    }
+
+    if ($error != '') {
+        show_users_page($pdo, $error);
+        return;
+    }
+
+    $user_id = create_owner($pdo, $username, $email, $password);
+    set_restaurant_owner($pdo, $place_id, $user_id);
+
+    redirect('/admin/users?saved=1');
+}

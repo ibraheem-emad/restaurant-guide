@@ -49,6 +49,11 @@ function login_submit($pdo)
         return;
     }
 
+    if ($user['is_blocked']) {
+        view('login', ['title' => 'تسجيل الدخول', 'error' => 'هذا الحساب محظور.']);
+        return;
+    }
+
     session_regenerate_id(true);
     $_SESSION['user_id'] = $user['user_id'];
     $_SESSION['username'] = $user['username'];
