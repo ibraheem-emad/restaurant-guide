@@ -7,7 +7,13 @@ CREATE TABLE app_user(
   username VARCHAR(255) NOT NULL,
   email    VARCHAR(255) NOT NULL UNIQUE,
   user_password VARCHAR(255) NOT NULL,
-  role     ENUM('user', 'owner', 'admin') NOT NULL DEFAULT 'user'
+    role     ENUM('user', 'owner', 'admin') NOT NULL DEFAULT 'user',
+  is_blocked BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE area (
+  area_id   INT AUTO_INCREMENT PRIMARY KEY,
+  area_name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE place (
@@ -18,7 +24,11 @@ CREATE TABLE place (
   longitude   DECIMAL(9,6) NOT NULL,
   rating      DECIMAL(2,1),
   price_range VARCHAR(255),
-  status      ENUM('draft', 'published', 'hidden') NOT NULL DEFAULT 'draft'
+  status      ENUM('draft', 'published', 'hidden') NOT NULL DEFAULT 'draft',
+  area_id     INT,
+  owner_id    INT,
+  FOREIGN KEY (area_id) REFERENCES area(area_id) ON DELETE SET NULL,
+  FOREIGN KEY (owner_id) REFERENCES app_user(user_id) ON DELETE SET NULL
 );
 
 CREATE TABLE category(
@@ -90,4 +100,37 @@ CREATE TABLE favorite (
   PRIMARY KEY (user_id, place_id),
   FOREIGN KEY (user_id) REFERENCES app_user(user_id) ON DELETE CASCADE,
   FOREIGN KEY (place_id) REFERENCES place(place_id) ON DELETE CASCADE
+);
+
+CREATE TABLE occasion (
+  occasion_id   INT AUTO_INCREMENT PRIMARY KEY,
+  occasion_name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE place_occasion (
+  place_id    INT NOT NULL,
+  occasion_id INT NOT NULL,
+  PRIMARY KEY (place_id, occasion_id),
+  FOREIGN KEY (place_id) REFERENCES place(place_id) ON DELETE CASCADE,
+  FOREIGN KEY (occasion_id) REFERENCES occasion(occasion_id) ON DELETE CASCADE
+);
+
+CREATE TABLE photo (
+  photo_id   INT AUTO_INCREMENT PRIMARY KEY,
+  place_id   INT NOT NULL,
+  file_name  VARCHAR(255) NOT NULL,
+  is_cover   BOOLEAN NOT NULL DEFAULT FALSE,
+  sort_order INT NOT NULL DEFAULT 0,
+  FOREIGN KEY (place_id) REFERENCES place(place_id) ON DELETE CASCADE
+);
+
+CREATE TABLE review_report (
+  report_id  INT AUTO_INCREMENT PRIMARY KEY,
+  review_id  INT NOT NULL,
+  user_id    INT NOT NULL,
+  reason     VARCHAR(255),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (review_id, user_id),
+  FOREIGN KEY (review_id) REFERENCES review(review_id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES app_user(user_id) ON DELETE CASCADE
 );

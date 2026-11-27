@@ -13,10 +13,22 @@ INSERT INTO attribute (attribute_name) VALUES
 ('مواقف سيارات'),
 ('مدخل لكراسي متحركة');
 
-INSERT INTO place (place_name, phone_number, latitude, longitude, rating, price_range, status) VALUES
-('مشاوي الريف', '0590000001', 31.903800, 35.203400, 4.5, 'medium', 'published'),
-('بيتزا البلد', '0590000002', 31.532600, 35.099800, 4.2, 'low', 'published'),
-('حلويات الشرق', '0590000003', 32.221100, 35.254400, 4.8, 'low', 'published');
+INSERT INTO area (area_name) VALUES
+('رام الله'),
+('الخليل'),
+('نابلس'),
+('بيت لحم');
+
+INSERT INTO occasion (occasion_name) VALUES
+('عائلة'),
+('أصدقاء'),
+('اجتماع عمل'),
+('مناسبة خاصة');
+
+INSERT INTO place (place_name, phone_number, latitude, longitude, rating, price_range, status, area_id) VALUES
+('مشاوي الريف', '0590000001', 31.903800, 35.203400, 4.5, 'medium', 'published', 1),
+('بيتزا البلد', '0590000002', 31.532600, 35.099800, 4.2, 'low', 'published', 2),
+('حلويات الشرق', '0590000003', 32.221100, 35.254400, 4.8, 'low', 'published', 3);
 
 INSERT INTO place_category (place_id, category_id) VALUES
 (1, 1),
@@ -29,6 +41,13 @@ INSERT INTO place_attribute (place_id, attribute_id) VALUES
 (2, 1),
 (2, 4),
 (3, 1);
+
+INSERT INTO place_occasion (place_id, occasion_id) VALUES
+(1, 1),
+(1, 2),
+(2, 2),
+(3, 1),
+(3, 4);
 
 INSERT INTO place_hours (place_id, day_of_week, open_time, close_time) VALUES
 (1, 0, '12:00', '23:00'),
@@ -77,12 +96,16 @@ INSERT INTO meal_category (meal_id, category_id) VALUES
 (10, 5);
 
 INSERT INTO app_user (username, email, user_password, role) VALUES
-('admin', 'admin@guide.test', '$2y$10$mFdso0RAbYFlaggKI8Fd9OTi55LLTtOGx/iuOH2wlwZRNh6oENEbu', 'admin');
+('admin', 'admin@guide.test', '$2y$10$mFdso0RAbYFlaggKI8Fd9OTi55LLTtOGx/iuOH2wlwZRNh6oENEbu', 'admin'); -- password: admin
 
 
 INSERT INTO app_user (username, email, user_password) VALUES
-('سارة', 'sara@guide.test', '$2y$10$S0LIDhdkJ.OQFokU07CsAuNyO/e4vJDzZLICJeQ5l3d0E.lsTdPCG'),
-('أحمد', 'ahmad@guide.test', '$2y$10$S0LIDhdkJ.OQFokU07CsAuNyO/e4vJDzZLICJeQ5l3d0E.lsTdPCG');
+('سارة', 'sara@guide.test', '$2y$10$S0LIDhdkJ.OQFokU07CsAuNyO/e4vJDzZLICJeQ5l3d0E.lsTdPCG'), -- password: 12345678
+('أحمد', 'ahmad@guide.test', '$2y$10$S0LIDhdkJ.OQFokU07CsAuNyO/e4vJDzZLICJeQ5l3d0E.lsTdPCG'); -- password: 12345678
+
+INSERT INTO app_user (username, email, user_password, role) VALUES
+('صاحب مشاوي الريف', 'owner@guide.test', '$2y$10$S0LIDhdkJ.OQFokU07CsAuNyO/e4vJDzZLICJeQ5l3d0E.lsTdPCG', 'owner'); -- password: 12345678
+UPDATE place SET owner_id = 4 WHERE place_id = 1;
 
 INSERT INTO review (user_id, place_id, rating, comment) VALUES
 (2, 1, 5, 'مشاوي طازجة وخدمة سريعة'),
@@ -94,3 +117,6 @@ INSERT INTO favorite (user_id, place_id) VALUES
 (2, 1),
 (2, 3),
 (3, 2);
+
+INSERT INTO review_report (review_id, user_id, reason) VALUES
+(4, 2, 'التعليق غير مفيد');
